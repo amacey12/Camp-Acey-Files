@@ -1589,12 +1589,6 @@ opacity: 1.0;
   </select>
 </div>
 
-
-              <div class="field-group">
-                <label for="email">Email</label>
-                <input id="email" name="email" type="email" placeholder="you@example.com" required />
-              </div>
-
               <div class="field-group">
                 <label>Claim your items</label>
                 <div class="contrib-list">
@@ -1700,11 +1694,7 @@ opacity: 1.0;
                 </div>
               </div>
 
-              <div class="field-group">
-                <label for="diet">Dietary restrictions or allergies</label>
-                <input id="diet" name="diet" type="text" placeholder="Gluten free, vegetarian, nut allergy, etc." />
-              </div>
-
+              
               <div class="form-footer">
                 <button type="submit" class="btn btn-primary">
                   <span class="icon">📬</span>
@@ -1810,22 +1800,26 @@ opacity: 1.0;
       </div>
     </div>
    <div class="expense-summary">
-  <!-- Who owes who header + toggle -->
+
+  <!-- Running Totals Header + Toggle -->
   <div class="summary-header">
-    <h3 class="mini-heading">Who owes who?</h3>
-    <button type="button" id="toggleWhoOwes" class="summary-toggle">
-      Hide
-    </button>
+    <h3 class="mini-heading">Running totals</h3>
+    <button type="button" id="toggleTotals" class="summary-toggle">Hide</button>
   </div>
 
-  <!-- This wraps BOTH totals + per-person balances so they hide together -->
-  <div id="whoOwesContainer">
-    <!-- Running totals -->
+  <div id="totalsContainer">
     <div id="expenseTotals" class="expense-summary-body" style="margin-bottom:8px;">
       Add campers and expenses to see totals.
     </div>
+  </div>
 
-    <!-- Per-person balances -->
+  <!-- Per-Person Balances Header + Toggle -->
+  <div class="summary-header" style="margin-top:12px;">
+    <h3 class="mini-heading">Per-person balances</h3>
+    <button type="button" id="toggleBalances" class="summary-toggle">Hide</button>
+  </div>
+
+  <div id="balancesContainer">
     <div id="expenseSummary" class="expense-summary-body" style="margin-bottom:8px;">
       Add campers and expenses to see balances.
     </div>
@@ -1834,16 +1828,13 @@ opacity: 1.0;
   <!-- Suggested paybacks header + toggle -->
   <div class="settlements-header">
     <h3 class="mini-heading" style="margin-top:10px;">Suggested paybacks</h3>
-    <button type="button" id="toggleSettlements" class="settlements-toggle">
-      Hide
-    </button>
+    <button type="button" id="toggleSettlements" class="settlements-toggle">Hide</button>
   </div>
 
   <div id="expenseSettlements" class="expense-summary-body">
     Add campers and expenses to see who should pay whom.
   </div>
 </div>
-
 
 
   </div>
@@ -2020,8 +2011,7 @@ opacity: 1.0;
 
     const form = event.target;
     const name = form.name.value.trim();
-    const email = form.email.value.trim(); // currently unused, but available
-
+    
     if (!name) {
       alert('Please add your name.');
       return;
@@ -2648,6 +2638,32 @@ function initSelectAllParticipants() {
     }
   });
 }
+
+function initTotalsToggle() {
+  const btn = document.getElementById('toggleTotals');
+  const box = document.getElementById('totalsContainer');
+  if (!btn || !box) return;
+
+  btn.addEventListener('click', () => {
+    const hidden = box.style.display === 'none';
+    box.style.display = hidden ? '' : 'none';
+    btn.textContent = hidden ? 'Hide' : 'Show';
+  });
+}
+
+function initBalancesToggle() {
+  const btn = document.getElementById('toggleBalances');
+  const box = document.getElementById('balancesContainer');
+  if (!btn || !box) return;
+
+  btn.addEventListener('click', () => {
+    const hidden = box.style.display === 'none';
+    box.style.display = hidden ? '' : 'none';
+    btn.textContent = hidden ? 'Hide' : 'Show';
+  });
+}
+
+
 function initWhoOwesToggle() {
   const btn = document.getElementById('toggleWhoOwes');
   const box = document.getElementById('whoOwesContainer'); // 👈 toggle the wrapper
@@ -2687,9 +2703,9 @@ function initSettlementToggle() {
   initBudgetTracker();
   startCountdown();
   initSelectAllParticipants();
+  initTotalsToggle();
+  initBalancesToggle();
   initSettlementToggle();
-initWhoOwesToggle();
-initCamperNameDropdown();
 });
 </script>
 </body>
