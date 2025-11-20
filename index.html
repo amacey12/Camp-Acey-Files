@@ -107,6 +107,62 @@
   text-decoration-thickness: 2px;
 }
 
+/* Collapsible containers (for totals, balances, paybacks) */
+.collapsible {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.25s ease;
+}
+
+.collapsible.open {
+  max-height: 800px; /* large enough for content */
+  opacity: 1;
+}
+
+/* Cabin-core toggle buttons */
+.summary-toggle,
+.settlements-toggle {
+  border: 1px solid rgba(31,59,50,0.18);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--pine-light);
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+  text-decoration: none;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease,
+    border-color 0.15s ease;
+}
+
+.summary-toggle:hover,
+.settlements-toggle:hover {
+  background: linear-gradient(135deg, #fdfbf7, #f3f7fb);
+  border-color: rgba(31,59,50,0.35);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+
+.summary-toggle:active,
+.settlements-toggle:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* little chevron icon */
+.toggle-icon {
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+}
+
+
 /* Honoring row (pill + photos) */
 .honor-row {
   margin-top: 14px;
@@ -1800,14 +1856,16 @@ opacity: 1.0;
       </div>
     </div>
    <div class="expense-summary">
-
   <!-- Running Totals Header + Toggle -->
   <div class="summary-header">
     <h3 class="mini-heading">Running totals</h3>
-    <button type="button" id="toggleTotals" class="summary-toggle">Hide</button>
+    <button type="button" id="toggleTotals" class="summary-toggle">
+      <span class="toggle-label">Show</span>
+      <span class="toggle-icon">▾</span>
+    </button>
   </div>
 
-  <div id="totalsContainer">
+  <div id="totalsContainer" class="collapsible">
     <div id="expenseTotals" class="expense-summary-body" style="margin-bottom:8px;">
       Add campers and expenses to see totals.
     </div>
@@ -1816,10 +1874,13 @@ opacity: 1.0;
   <!-- Per-Person Balances Header + Toggle -->
   <div class="summary-header" style="margin-top:12px;">
     <h3 class="mini-heading">Per-person balances</h3>
-    <button type="button" id="toggleBalances" class="summary-toggle">Hide</button>
+    <button type="button" id="toggleBalances" class="summary-toggle">
+      <span class="toggle-label">Show</span>
+      <span class="toggle-icon">▾</span>
+    </button>
   </div>
 
-  <div id="balancesContainer">
+  <div id="balancesContainer" class="collapsible">
     <div id="expenseSummary" class="expense-summary-body" style="margin-bottom:8px;">
       Add campers and expenses to see balances.
     </div>
@@ -1828,13 +1889,17 @@ opacity: 1.0;
   <!-- Suggested paybacks header + toggle -->
   <div class="settlements-header">
     <h3 class="mini-heading" style="margin-top:10px;">Suggested paybacks</h3>
-    <button type="button" id="toggleSettlements" class="settlements-toggle">Hide</button>
+    <button type="button" id="toggleSettlements" class="settlements-toggle">
+      <span class="toggle-label">Show</span>
+      <span class="toggle-icon">▾</span>
+    </button>
   </div>
 
-  <div id="expenseSettlements" class="expense-summary-body">
+  <div id="expenseSettlements" class="expense-summary-body collapsible">
     Add campers and expenses to see who should pay whom.
   </div>
 </div>
+
 
 
   </div>
@@ -2639,27 +2704,31 @@ function initSelectAllParticipants() {
   });
 }
 
-function initTotalsToggle() {
-  const btn = document.getElementById('toggleTotals');
-  const box = document.getElementById('totalsContainer');
+function setupToggle(buttonId, containerId) {
+  const btn = document.getElementById(buttonId);
+  const box = document.getElementById(containerId);
   if (!btn || !box) return;
 
-  btn.addEventListener('click', () => {
-    const hidden = box.style.display === 'none';
-    box.style.display = hidden ? '' : 'none';
-    btn.textContent = hidden ? 'Hide' : 'Show';
-  });
-}
+  // Ensure we start collapsed
+  box.classList.remove('open');
+  const labelSpan = btn.querySelector('.toggle-label');
+  const iconSpan = btn.querySelector('.toggle-icon');
 
-function initBalancesToggle() {
-  const btn = document.getElementById('toggleBalances');
-  const box = document.getElementById('balancesContainer');
-  if (!btn || !box) return;
+  if (labelSpan) labelSpan.textContent = 'Show';
+  if (iconSpan) iconSpan.style.transform = 'rotate(0deg)';
 
   btn.addEventListener('click', () => {
-    const hidden = box.style.display === 'none';
-    box.style.display = hidden ? '' : 'none';
-    btn.textContent = hidden ? 'Hide' : 'Show';
+    const isOpen = box.classList.contains('open');
+
+    if (isOpen) {
+      box.classList.remove('open');
+      if (labelSpan) labelSpan.textContent = 'Show';
+      if (iconSpan) iconSpan.style.transform = 'rotate(0deg)';
+    } else {
+      box.classList.add('open');
+      if (labelSpan) labelSpan.textContent = 'Hide';
+      if (iconSpan) iconSpan.style.transform = 'rotate(180deg)';
+    }
   });
 }
 
@@ -2681,21 +2750,6 @@ function initWhoOwesToggle() {
   });
 }
 
-function initSettlementToggle() {
-  const btn = document.getElementById('toggleSettlements');
-  const box = document.getElementById('expenseSettlements');
-  if (!btn || !box) return;
-
-  btn.addEventListener('click', () => {
-    const isHidden = box.style.display === 'none';
-
-    // Toggle visibility
-    box.style.display = isHidden ? '' : 'none';
-
-    // Update button label
-    btn.textContent = isHidden ? 'Hide' : 'Show';
-  });
-}
 
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -2703,9 +2757,11 @@ function initSettlementToggle() {
   initBudgetTracker();
   startCountdown();
   initSelectAllParticipants();
-  initTotalsToggle();
-  initBalancesToggle();
-  initSettlementToggle();
+ 
+  // New toggles with animation
+  setupToggle('toggleTotals', 'totalsContainer');
+  setupToggle('toggleBalances', 'balancesContainer');
+  setupToggle('toggleSettlements', 'expenseSettlements');
 });
 </script>
 </body>
