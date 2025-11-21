@@ -901,84 +901,142 @@
       margin-top: 2px;
     }
 
+        /* ---------- FULL CONTRIBUTION LIST (display only) ---------- */
+
+        /* ---------- FULL CONTRIBUTION LIST (display only) ---------- */
+
     .contrib-table {
       margin-top: 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(31,59,50,0.10);
-      background: #ffffff;
-      padding: 8px;
-    }
-
-    .contrib-accordion + .contrib-accordion {
-      margin-top: 6px;
-    }
-
-    .accordion-header {
-      width: 100%;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 12px;
-      border-radius: 12px;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .contrib-group {
+      border-radius: 16px;
+      background: #ffffff;
+      border: 1px solid rgba(31,59,50,0.10);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+
+    .full-contrib-header {
+      width: 100%;
+      border: none;
       background: #f3f7fb;
-      border: 1px solid rgba(31,59,50,0.12);
+      padding: 9px 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 10px;
       cursor: pointer;
       font-size: 0.9rem;
       color: var(--pine);
     }
 
-    .accordion-header .cat-label {
+    .full-contrib-header .cat-label {
       font-weight: 700;
     }
 
-    .accordion-header .pill {
-      background: rgba(31,59,50,0.08);
+    .full-contrib-header .pill {
+      justify-self: center;
+      min-width: 34px;
       padding: 3px 9px;
       border-radius: 999px;
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       font-weight: 600;
+      background: #e4ebf3;
+      text-align: center;
     }
 
-    .accordion-header .chevron {
-      transition: transform 0.15s ease;
+    .full-contrib-header .chevron {
       font-size: 0.8rem;
       color: var(--muted);
+      transition: transform 0.15s ease;
+      justify-self: end;
     }
 
-    .contrib-accordion.open .chevron {
+    .contrib-group.open .full-contrib-header .chevron {
       transform: rotate(180deg);
     }
 
-    .accordion-body-inner {
+    .contrib-body {
       display: none;
-      padding: 8px 4px 4px;
+      padding: 8px 14px 10px;
+      border-top: 1px solid rgba(31,59,50,0.06);
+      background: #ffffff;
     }
 
-    .contrib-accordion.open .accordion-body-inner {
+    .contrib-group.open .contrib-body {
       display: block;
     }
 
-    .accordion-body-inner table {
-      width: 100%;
-      border-collapse: collapse;
+    .contrib-body-head,
+    .contrib-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.5fr) auto;
+      gap: 12px;
+      align-items: center;
+      font-size: 0.86rem;
     }
 
-    .accordion-body-inner th {
-      padding: 6px 8px;
-      text-align: left;
-      font-size: 0.75rem;
-      color: var(--muted);
-      border-bottom: 1px solid rgba(31,59,50,0.1);
+    .contrib-body-head {
+      padding-bottom: 4px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid rgba(31,59,50,0.10);
       text-transform: uppercase;
       letter-spacing: 0.06em;
+      font-size: 0.75rem;
+      color: var(--muted);
     }
 
-    .accordion-body-inner td {
-      padding: 6px 8px;
-      border-bottom: 1px solid rgba(31,59,50,0.05);
-      font-size: 0.88rem;
-      color: var(--pine-light);
+    .contrib-row {
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(31,59,50,0.04);
     }
+
+    .contrib-row:last-child {
+      border-bottom: none;
+    }
+
+    .contrib-row-name {
+      font-weight: 600;
+      color: var(--pine);
+      word-break: break-word;
+    }
+
+    .contrib-row-item {
+      color: var(--pine-light);
+      word-break: break-word;
+    }
+
+    .contrib-row-actions {
+      text-align: right;
+    }
+
+    .contrib-remove {
+      border-radius: 999px;
+      border: 1px solid rgba(195,91,76,0.5);
+      background: #fff7f3;
+      color: var(--accent);
+      font-size: 0.76rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.1s ease,
+        transform 0.1s ease;
+    }
+
+    .contrib-remove:hover {
+      background: #ffe0d7;
+      border-color: var(--accent);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      transform: translateY(-1px);
+    }
+
 
     .countdown-plaid-bg {
       width: 100%;
@@ -1178,17 +1236,7 @@
             </div>
           </div>
 
-          <div class="hero-cta">
-            <a href="#signup" class="btn btn-primary">
-              <span class="icon">✨</span>
-              Claim what you're bringing
-            </a>
-            <a href="#itinerary" class="btn btn-secondary">
-              <span class="icon">📜</span>
-              View weekend plan
-            </a>
-          </div>
-        </div>
+           </div>
       </header>
 
       <!-- Countdown banner -->
@@ -1650,8 +1698,8 @@
   </div>
 
   <script>
-    const EXPENSES_API_URL = 'https://script.google.com/macros/s/AKfycbzmpirhYyKccwVPxtNrX63CmyG5S5e5hbFrSnp1Fl-f-zGO1vzHo7cGfqTJHXR6xlzS7w/exec';
-    const API_URL = 'https://script.google.com/macros/s/AKfycbz5xQCKgyL7_b4mPgPYlFQQMbF_iHuuqwnu9gdeCHgHyrVWB3SZSWNCXANWo4APRIiQFg/exec';
+    const EXPENSES_API_URL = 'https://script.google.com/macros/s/AKfycbyOjL7cEw2gxlozhl-XFP6IpejjW7O91FFqrshU8CQ0cVp31tuQyfeBZh3uHiPqpLJD5A/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxbxwjIL7yxbqMqQ4kJ50AZmrTVUQ-lDX-TSP-Fsk0Fs5i2TxBa0hnS2tzFG_8n80A8Kg/exec';
 
     const CATEGORY_MAP = {
       snacks: 'Snacks & chips',
@@ -1702,7 +1750,162 @@
       }
     }
 
-    function renderContributions(items) {
+async function deleteContribution(timestamp) {
+  if (!API_URL) return { ok: false };
+
+  try {
+    const body = new URLSearchParams({
+      payload: JSON.stringify({
+        type: 'deleteContribution',
+        timestamp   // use timestamp to identify the row in the Sheet
+      })
+    });
+
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      body
+    });
+
+    const data = await res.json();
+    if (data.status === 'success') {
+      return { ok: true };
+    } else {
+      console.error('Error from contributions API', data);
+      return { ok: false, error: data.message };
+    }
+  } catch (err) {
+    console.error('Network error deleting contribution', err);
+    return { ok: false, error: 'Network error' };
+  }
+}
+
+// Try to map free-text items (old data) into a real category
+function guessCategoryFromText(text) {
+  if (!text) return 'Other Item';
+  const t = text.toLowerCase();
+
+  if (t.includes('chip') || t.includes('guac') || t.includes('dip') ||
+      t.includes('salsa') || t.includes('hummus') || t.includes('snack')) {
+    return 'Snacks & chips';
+  }
+
+  if (t.includes('cookie') || t.includes('brownie') || t.includes('cake') ||
+      t.includes('cupcake') || t.includes('dessert') || t.includes('sweet') ||
+      t.includes('candy')) {
+    return 'Desserts / sweet treats';
+  }
+
+  if (t.includes('charcuterie') || t.includes('cheese') || t.includes('meat') ||
+      t.includes('cracker') || t.includes('salami') || t.includes('prosciutto')) {
+    return 'Charcuterie / cheese board';
+  }
+
+  if (t.includes('breakfast') || t.includes('brunch') || t.includes('bagel') ||
+      t.includes('egg') || t.includes('bacon') || t.includes('pancake') ||
+      t.includes('waffle') || t.includes('quiche') || t.includes('muffin') ||
+      t.includes('croissant')) {
+    return 'Breakfast & brunch items';
+  }
+
+  if (t.includes('vodka') || t.includes('tequila') || t.includes('wine') ||
+      t.includes('beer') || t.includes('whiskey') || t.includes('bourbon') ||
+      t.includes('champagne') || t.includes('prosecco') || t.includes('liquor')) {
+    return 'Beer/Wine/Liquor';
+  }
+
+  if (t.includes('seltzer') || t.includes('soda') || t.includes('juice') ||
+      t.includes('mocktail') || t.includes('mixer') || t.includes('na ')) {
+    return 'NA Beverages / mixers';
+  }
+
+  if (t.includes('coffee') || t.includes('tea') || t.includes('creamer') ||
+      t.includes('syrup') || t.includes('sugar')) {
+    return 'Coffee & tea station';
+  }
+
+  if (t.includes('game') || t.includes('twister') || t.includes('cards') ||
+      t.includes('uno') || t.includes('jenga')) {
+    return 'Game/Activity';
+  }
+
+  if (t.includes('decor') || t.includes('banner') || t.includes('balloon') ||
+      t.includes('garland') || t.includes('lights') || t.includes('fairy') ||
+      t.includes('sign') || t.includes('confetti')) {
+    return 'Decor & ambiance';
+  }
+
+  return 'Other Item';
+}
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      if (!API_URL) return;
+
+      const nameSelect = document.getElementById('name');
+      const camperName = (nameSelect && nameSelect.value.trim()) || '';
+
+      if (!camperName) {
+        alert('Please select your name before submitting.');
+        return;
+      }
+
+      // Collect all items the camper filled in
+      const items = [];
+      document.querySelectorAll('.contrib-item').forEach(block => {
+        const category = block.getAttribute('data-category');
+        const input = block.querySelector('input[type="text"]');
+        if (!category || !input) return;
+
+        const description = input.value.trim();
+        if (description) {
+          items.push({ category, description });
+        }
+      });
+
+      if (!items.length) {
+        alert('Please enter at least one item you are bringing.');
+        return;
+      }
+
+      try {
+        const body = new URLSearchParams({
+          payload: JSON.stringify({
+            name: camperName,
+            items
+          })
+        });
+
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          body
+        });
+
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          // Clear the text inputs
+          document
+            .querySelectorAll('.contrib-item input[type="text"]')
+            .forEach(inp => (inp.value = ''));
+
+          // Refresh the live lists
+          fetchContributions();
+
+          alert('Got it! Your contributions have been saved.');
+        } else {
+          console.error('Error from contributions API', data);
+          alert('There was a problem saving your contributions. Please try again.');
+        }
+      } catch (err) {
+        console.error('Network error saving contributions', err);
+        alert('There was a network problem. Please try again.');
+      }
+    }
+
+
+      function renderContributions(items) {
+      // ---- 1) Update the per-category “Already bringing” text ----
       const grouped = {};
       (items || []).forEach(item => {
         const cat = item.category;
@@ -1730,124 +1933,130 @@
         }
       });
 
+      // ---- 2) Build the full contribution list (grouped by category) ----
       const tableDiv = document.getElementById('all-contrib-table');
-      if (tableDiv) {
-        if (!items || items.length === 0) {
-          tableDiv.innerHTML = "<p>No contributions yet — be the first one! 🏕️</p>";
-        } else {
-          const byCategory = {};
-          items.forEach(i => {
-            if (!byCategory[i.category]) byCategory[i.category] = [];
-            byCategory[i.category].push(i);
-          });
+      if (!tableDiv) return;
 
-          Object.keys(byCategory).forEach(cat => {
-            byCategory[cat].sort((a, b) => {
-              const nameCmp = (a.name || '').localeCompare(b.name || '');
-              if (nameCmp !== 0) return nameCmp;
-              return (a.description || '').localeCompare(b.description || '');
-            });
-          });
-
-          const catsInData = Object.keys(byCategory);
-          const orderedCats = CATEGORY_ORDER.filter(cat => catsInData.includes(cat));
-          catsInData.forEach(cat => {
-            if (!orderedCats.includes(cat)) orderedCats.push(cat);
-          });
-
-          let html = '';
-          orderedCats.forEach(cat => {
-            const list = byCategory[cat];
-            if (!list || list.length === 0) return;
-
-            const label = CATEGORY_INFO[cat]?.label || cat;
-            const groupId = 'cat-' + cat.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-
-            html += `
-              <div class="contrib-accordion">
-                <button class="accordion-header" data-target="${groupId}">
-                  <span class="cat-label">${label}</span>
-                  <span class="pill">${list.length}</span>
-                  <span class="chevron">▾</span>
-                </button>
-                <div class="accordion-body-inner" id="${groupId}">
-                  <table>
-                    <tr>
-                      <th>Name</th>
-                      <th>Item</th>
-                    </tr>
-                    ${list.map(i => `
-                      <tr>
-                        <td>${i.name || ''}</td>
-                        <td>${i.description || ''}</td>
-                      </tr>
-                    `).join('')}
-                  </table>
-                </div>
-              </div>
-            `;
-          });
-
-          tableDiv.innerHTML = html;
-          attachAccordions();
-        }
-      }
-    }
-
-    async function handleFormSubmit(event) {
-      event.preventDefault();
-
-      const form = event.target;
-      const name = form.name.value.trim();
-
-      if (!name) {
-        alert('Please add your name.');
+      if (!items || items.length === 0) {
+        tableDiv.innerHTML = "<p>No contributions yet — be the first one! 🏕️</p>";
         return;
       }
 
-      const items = [];
-      Object.keys(CATEGORY_MAP).forEach(fieldName => {
-        const input = form.querySelector(`[name="${fieldName}"]`);
-        if (!input) return;
-        const desc = input.value.trim();
-        if (desc) {
-          items.push({
-            category: CATEGORY_MAP[fieldName],
-            description: desc
-          });
-        }
+      const byCategory = {};
+      items.forEach(i => {
+        const cat = i.category || 'Other Item';
+        if (!byCategory[cat]) byCategory[cat] = [];
+        byCategory[cat].push(i);
       });
 
-      if (items.length === 0) {
-        alert('Please claim at least one item to bring.');
-        return;
-      }
-
-      try {
-        const body = new URLSearchParams({
-          payload: JSON.stringify({ name, items })
+      // Sort each category's list by name then description
+      Object.keys(byCategory).forEach(cat => {
+        byCategory[cat].sort((a, b) => {
+          const nameCmp = (a.name || '').localeCompare(b.name || '');
+          if (nameCmp !== 0) return nameCmp;
+          return (a.description || '').localeCompare(b.description || '');
         });
+      });
 
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          body
-        });
+      const catsInData = Object.keys(byCategory);
+      const orderedCats = CATEGORY_ORDER.filter(cat => catsInData.includes(cat));
+      catsInData.forEach(cat => {
+        if (!orderedCats.includes(cat)) orderedCats.push(cat);
+      });
 
-        const data = await res.json();
+      let html = '';
 
-        if (data.status === 'success') {
-          alert('Thanks for claiming your items for Camp Acey! 🏕️');
-          form.reset();
-          fetchContributions();
-        } else {
-          console.error(data);
-          alert('There was an issue saving your contributions. Please try again.');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('There was an error connecting to the server. Please try again.');
-      }
+      orderedCats.forEach(cat => {
+        const list = byCategory[cat];
+        if (!list || list.length === 0) return;
+
+        const label = CATEGORY_INFO[cat]?.label || cat;
+        const groupId = 'contrib-' + cat.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+        html += `
+          <div class="contrib-group">
+            <button
+              type="button"
+              class="full-contrib-header"
+              data-target="${groupId}"
+            >
+              <span class="cat-label">${label}</span>
+              <span class="pill">${list.length}</span>
+              <span class="chevron">▾</span>
+            </button>
+
+            <div class="contrib-body" id="${groupId}">
+              <div class="contrib-body-head">
+                <span>Name</span>
+                <span>Item</span>
+                <span></span>
+              </div>
+
+              ${list
+                .map(i => `
+                  <div class="contrib-row">
+                    <div class="contrib-row-name">${i.name || ''}</div>
+                    <div class="contrib-row-item">${i.description || ''}</div>
+                    <div class="contrib-row-actions">
+                      ${
+                        i.timestamp
+                          ? `<button
+                               type="button"
+                               class="contrib-remove"
+                               data-timestamp="${i.timestamp}"
+                             >
+                               Remove
+                             </button>`
+                          : ''
+                      }
+                    </div>
+                  </div>
+                `)
+                .join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      tableDiv.innerHTML = html;
+      attachContributionAccordions();
+      attachContributionDeleteHandlers();
     }
+
+    function attachContributionAccordions() {
+      document.querySelectorAll('.full-contrib-header').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const group = btn.closest('.contrib-group');
+          if (!group) return;
+          group.classList.toggle('open');
+        });
+      });
+    }
+
+    function attachContributionDeleteHandlers() {
+      const buttons = document.querySelectorAll('.contrib-remove');
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const ts = btn.dataset.timestamp;
+          if (!ts) return;
+
+          const ok = confirm('Remove this contribution from the list?');
+          if (!ok) return;
+
+          const result = await deleteContribution(ts);
+          if (!result.ok) {
+            alert('There was a problem removing this contribution. Please try again.');
+            return;
+          }
+
+          // Reload from Sheet so the UI stays in sync
+          fetchContributions();
+        });
+      });
+    }
+
+
 
     function attachAccordions() {
       document.querySelectorAll('.accordion-header').forEach(btn => {
@@ -1863,6 +2072,29 @@
         };
       });
     }
+
+function attachContributionDeleteHandlers() {
+  const buttons = document.querySelectorAll('.contrib-remove');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const ts = btn.dataset.timestamp;
+      if (!ts) return;
+
+      const ok = confirm('Remove this contribution from the list?');
+      if (!ok) return;
+
+      const result = await deleteContribution(ts);
+      if (!result.ok) {
+        alert('There was a problem removing this contribution. Please try again.');
+        return;
+      }
+
+      // Reload contributions from the server so the list stays in sync
+      fetchContributions();
+    });
+  });
+}
 
     /* Countdown */
     const CAMP_START = new Date('2026-01-30T16:00:00');
