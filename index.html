@@ -1223,7 +1223,7 @@
 
       <main>
         <!-- WEEKEND ITINERARY -->
-        <details class="main-accordion" open>
+        <details class="main-accordion">
           <summary class="accordion-summary">
             <div class="accordion-summary-left">
               <div class="accordion-summary-title">Weekend Itinerary</div>
@@ -2229,23 +2229,36 @@
     }
 
     async function loadExpensesFromSheet() {
-      if (!EXPENSES_API_URL) return;
-      try {
-        const res = await fetch(EXPENSES_API_URL);
-        const data = await res.json();
-        expenses = (data.items || []).map(item => ({
-          desc: item.desc,
-          amount: Number(item.amount) || 0,
-          category: item.category || '',
-          payer: item.payer || '',
-          participants: item.participants || [],
-          note: item.note || ''
-        }));
-        renderExpensesAndBalances();
-      } catch (err) {
-        console.error('Error loading expenses', err);
-      }
-    }
+  if (!EXPENSES_API_URL) return;
+  try {
+    const res = await fetch(EXPENSES_API_URL);
+    const data = await res.json();
+
+    expenses = (data.items || [])
+      .map(item => ({
+        desc: item.desc,
+        amount: Number(item.amount) || 0,
+        category: item.category || '',
+        payer: item.payer || '',
+        participants: item.participants || [],
+        note: item.note || '',
+        // assume the API gives a timestamp string; if not, this will just be null
+        timestamp: item.timestamp ? new Date(item.timestamp) : null
+      }))
+      .sort((a, b) => {
+        // newest (largest timestamp) first
+        if (a.timestamp && b.timestamp) {
+          return b.timestamp - a.timestamp;
+        }
+        return 0;
+      });
+
+    renderExpensesAndBalances();
+  } catch (err) {
+    console.error('Error loading expenses', err);
+  }
+}
+
 
     async function addExpenseToSheet(expense) {
       if (!EXPENSES_API_URL) return { ok: false };
@@ -2370,7 +2383,9 @@
           return;
         }
 
-        expenses.push(expense);
+        // put newest expense at the top of the list
+expenses.unshift(expense);
+
 
         descInput.value = '';
         amountInput.value = '';
